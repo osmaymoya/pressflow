@@ -232,7 +232,10 @@ function drupal_wrap_mail($text, $indent = '') {
   // Space-stuff special lines.
   $text = preg_replace('/^(>| |From)/m', ' $1', $text);
   // Apply indentation. We only include non-'>' indentation on the first line.
-  $text = $indent . substr(preg_replace('/^/m', $clean_indent, $text), strlen($indent));
+    $text = preg_replace_callback('/^/m', function($matches) use ($clean_indent) {
+        return $clean_indent;
+    }, $text);
+    $text = $indent . substr($text, strlen($indent));
 
   return $text;
 }
